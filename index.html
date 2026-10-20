@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Police City</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="city-bg" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <main class="start-screen">
+    <button type="button" class="role-btn role-btn--police" id="btn-police">
+      Police
+    </button>
+
+    <h1 class="title">
+      <span class="title__line">The</span>
+      <span class="title__main">Police City</span>
+    </h1>
+
+    <button type="button" class="role-btn role-btn--criminal" id="btn-criminal">
+      criminal
+    </button>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
