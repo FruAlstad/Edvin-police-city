@@ -8,12 +8,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
-  <div class="city-bg" aria-hidden="true"></div>
+  <canvas id="game-canvas" class="game-canvas game-canvas--menu"></canvas>
   <div class="scanlines" aria-hidden="true"></div>
 
-  <main class="start-screen">
+  <p class="district-label" id="district-label" aria-live="polite">Downtown</p>
+
+  <main class="start-screen" id="start-screen">
     <button type="button" class="role-btn role-btn--police" id="btn-police">
       Police
     </button>
@@ -28,6 +38,76 @@
     </button>
   </main>
 
-  <script src="game.js"></script>
+  <section class="customize is-hidden" id="customize-screen" aria-label="Criminal outfit">
+    <header class="customize__header">
+      <button type="button" class="customize__back" id="btn-customize-back">← Back</button>
+      <h2 class="customize__title">Choose your look</h2>
+    </header>
+
+    <nav class="customize__cats" aria-label="Categories">
+      <button type="button" class="cat-btn is-active" data-category="sweaters">sweaters</button>
+      <button type="button" class="cat-btn" data-category="pants">pants</button>
+      <button type="button" class="cat-btn" data-category="cap">cap</button>
+      <button type="button" class="cat-btn" data-category="other">other things</button>
+    </nav>
+
+    <div class="customize__panel">
+      <h3 class="customize__panel-title" id="customize-panel-title">sweaters</h3>
+      <div class="item-grid" id="item-grid"></div>
+    </div>
+
+    <aside class="customize__summary" id="loadout-summary">
+      <p><span>Sweater</span> <strong data-slot="sweater">—</strong></p>
+      <p><span>Pants</span> <strong data-slot="pants">—</strong></p>
+      <p><span>Cap</span> <strong data-slot="cap">—</strong></p>
+      <p><span>Mask</span> <strong data-slot="mask">—</strong></p>
+      <p><span>Weapon</span> <strong data-slot="weapon">—</strong></p>
+    </aside>
+  </section>
+
+  <button type="button" class="go-to-game is-hidden" id="btn-customize-play">go to game</button>
+
+  <div class="hud is-hidden" id="hud">
+    <p class="hud__role" id="hud-role"></p>
+    <p class="hud__hint">WASD — rörelse · Mus — titta · Esc — meny</p>
+    <p class="hud__district" id="hud-district"></p>
+  </div>
+
+  <script>
+    // UI works even before / without the 3D module finishing load
+    window.PoliceCityUI = {
+      showCustomize() {
+        document.body.classList.add("is-customizing");
+        document.body.classList.remove("is-playing");
+        document.getElementById("start-screen")?.classList.add("is-hidden");
+        document.getElementById("customize-screen")?.classList.remove("is-hidden");
+        document.getElementById("btn-customize-play")?.classList.remove("is-hidden");
+        document.getElementById("hud")?.classList.add("is-hidden");
+      },
+      hideCustomize() {
+        document.body.classList.remove("is-customizing");
+        document.getElementById("customize-screen")?.classList.add("is-hidden");
+        document.getElementById("btn-customize-play")?.classList.add("is-hidden");
+        document.getElementById("start-screen")?.classList.remove("is-hidden");
+      },
+    };
+
+    document.getElementById("btn-criminal")?.addEventListener("click", () => {
+      if (typeof window.openCriminalCustomize === "function") {
+        window.openCriminalCustomize();
+      } else {
+        window.PoliceCityUI.showCustomize();
+      }
+    });
+
+    document.getElementById("btn-customize-back")?.addEventListener("click", () => {
+      if (typeof window.closeCriminalCustomize === "function") {
+        window.closeCriminalCustomize();
+      } else {
+        window.PoliceCityUI.hideCustomize();
+      }
+    });
+  </script>
+  <script type="module" src="game.js?v=4"></script>
 </body>
 </html>
